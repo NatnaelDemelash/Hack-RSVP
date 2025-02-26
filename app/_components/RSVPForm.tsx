@@ -25,24 +25,31 @@ const RSVPForm = () => {
     teamName: "",
     trackPreference: "",
     mentorship: false,
-    evetDate: "2025-04-25", //YYYY-MM-DD format
+    eventDate: "2025-04-25", //YYYY-MM-DD format
+    eventLocation: "ALX Ethiopia |Lideta Hub, 4th Floor|",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Please enter a valid email address.";
-    if (!formData.attendance)
-      newErrors.attendance = "Please select your attendance status.";
-    if (!formData.skills.trim()) newErrors.skills = "Skills are required.";
-    return Object.keys(newErrors).length === 0 ? null : newErrors;
-  };
+  // const validateForm = () => {
+  //   const newErrors: Record<string, string> = {};
+  //   if (!formData.name.trim()) newErrors.name = "Name is required.";
+  //   if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email))
+  //     newErrors.email = "Please enter a valid email address.";
+  //   if (!formData.attendance)
+  //     newErrors.attendance = "Please select your attendance status.";
+  //   if (!formData.skills.trim()) newErrors.skills = "Skills are required.";
+  //   return Object.keys(newErrors).length === 0 ? null : newErrors;
+  // };
 
   const handleSubmit = (e: React.FormEvent) => {};
+
+  const openGoogleMaps = () => {
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${formData.eventLocation}`
+    );
+  };
 
   return (
     <div className="max-w-md mx-auto my-10">
@@ -55,16 +62,17 @@ const RSVPForm = () => {
       {/* Event Details */}
       <div className="mb-6 border p-4 rounded-lg bg-white shadow flex flex-col items-center">
         <Label>Event Details</Label>
-        {/* <p className="mt-2">Date: April 25th, 2025</p> */}
         <Calendar
           mode="single"
-          selected={new Date(formData.evetDate)}
+          selected={new Date(formData.eventDate)}
           className="rounded  flex flex-col items-center w-full"
-          fromDate={new Date(formData.evetDate)}
-          toDate={new Date("2025-04-28")}
+          fromDate={new Date(formData.eventDate)}
+          toDate={new Date(formData.eventDate)}
+          defaultMonth={new Date(formData.eventDate)}
+          ISOWeek
         />
         <div className="mt-4 flex items-center">
-          <Button>
+          <Button type="button" variant="outline" onClick={openGoogleMaps}>
             <MapPin className="mr-2" />
             View Location on Map
           </Button>
