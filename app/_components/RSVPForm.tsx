@@ -14,6 +14,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { Calendar } from "@/components/ui/calendar";
 
 const RSVPForm = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ const RSVPForm = () => {
     teamName: "",
     trackPreference: "",
     mentorship: false,
+    evetDate: "2025-04-25", //YYYY-MM-DD format
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -40,32 +42,7 @@ const RSVPForm = () => {
     return Object.keys(newErrors).length === 0 ? null : newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const validationErrors = validateForm();
-    if (validationErrors) {
-      setErrors(validationErrors);
-      setIsLoading(false);
-      return;
-    }
-
-    // Simulate form submission
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Thank you for registering!");
-      setFormData({
-        name: "",
-        email: "",
-        attendance: "yes",
-        skills: "",
-        teamName: "",
-        trackPreference: "",
-        mentorship: false,
-      });
-      setErrors({});
-    }, 1500);
-  };
+  const handleSubmit = (e: React.FormEvent) => {};
 
   return (
     <div className="max-w-md mx-auto my-10">
@@ -76,12 +53,21 @@ const RSVPForm = () => {
       </p>
 
       {/* Event Details */}
-      <div className="mb-6 border p-4 rounded-lg bg-white shadow">
+      <div className="mb-6 border p-4 rounded-lg bg-white shadow flex flex-col items-center">
         <Label>Event Details</Label>
-        <p className="mt-2">Date: April 25th, 2025</p>
+        {/* <p className="mt-2">Date: April 25th, 2025</p> */}
+        <Calendar
+          mode="single"
+          selected={new Date(formData.evetDate)}
+          className="rounded  flex flex-col items-center w-full"
+          fromDate={new Date(formData.evetDate)}
+          toDate={new Date("2025-04-28")}
+        />
         <div className="mt-4 flex items-center">
-          <MapPin className="mr-2" />
-          <span>Location: Online &amp; In-Person (Venue TBA)</span>
+          <Button>
+            <MapPin className="mr-2" />
+            View Location on Map
+          </Button>
         </div>
       </div>
 
