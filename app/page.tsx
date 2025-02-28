@@ -1,22 +1,12 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import hackathonImage2 from "../public/back-1.jpg";
-import {
-  ChevronDownCircle,
-  Gift,
-  GitPullRequestClosedIcon,
-  PanelTopClose,
-  PenSquareIcon,
-  PercentSquareIcon,
-  PersonStanding,
-  PresentationIcon,
-  SquareArrowOutUpRightIcon,
-} from "lucide-react";
+import hackathonImage2 from '../public/back-1.jpg';
+import { ChevronDownCircle, SquareArrowOutUpRightIcon } from 'lucide-react';
 
 const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {" "}
+      {' '}
       {/* Use flex-col and min-h-screen */}
       {/* Header Section */}
       <header className=" text-gray-900 pt-12 pb-2 px-4 md:px-8">
@@ -36,7 +26,7 @@ const HomePage = () => {
       </header>
       {/* Event Details Section */}
       <main className="flex-grow  pb-12 px-4 md:px-8">
-        {" "}
+        {' '}
         <div className="max-w-md mx-auto mb-6">
           <Image
             src={hackathonImage2}
@@ -50,9 +40,9 @@ const HomePage = () => {
           <h2 className="text-3xl font-bold mb-6">About HackFest</h2>
           <p className="text-gray-700 leading-relaxed mb-8 max-w-4xl mx-auto">
             HackFest is a 24-hour hackathon where developers, designers, and
-            innovators come together to build amazing projects. Whether you're a
-            beginner or a seasoned pro, this is your chance to showcase your
-            skills and learn something new!
+            innovators come together to build amazing projects. Whether
+            you&apos;re a beginner or a seasoned pro, this is your chance to
+            showcase your skills and learn something new!
           </p>
 
           <div className="flex flex-wrap justify-center gap-8 mb-12">

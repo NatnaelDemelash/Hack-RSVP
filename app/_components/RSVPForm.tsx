@@ -1,53 +1,118 @@
-"use client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+'use client';
+import React from 'react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { MapPin } from "lucide-react";
-import { toast } from "sonner";
-import { Calendar } from "@/components/ui/calendar";
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { MapPin } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
 
 const RSVPForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    attendance: "yes",
-    skills: "",
-    teamName: "",
-    trackPreference: "",
+    name: '',
+    email: '',
+    attendance: 'yes',
+    skills: '',
+    teamName: '',
+    trackPreference: '',
     mentorship: false,
-    eventDate: "2025-04-25", //YYYY-MM-DD format
-    eventLocation: "ALX Ethiopia |Lideta Hub, 4th Floor|",
+    eventDate: '2025-04-25', // YYYY-MM-DD format
+    eventLocation: 'ALX Ethiopia |Lideta Hub, 4th Floor|',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // const validateForm = () => {
-  //   const newErrors: Record<string, string> = {};
-  //   if (!formData.name.trim()) newErrors.name = "Name is required.";
-  //   if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email))
-  //     newErrors.email = "Please enter a valid email address.";
-  //   if (!formData.attendance)
-  //     newErrors.attendance = "Please select your attendance status.";
-  //   if (!formData.skills.trim()) newErrors.skills = "Skills are required.";
-  //   return Object.keys(newErrors).length === 0 ? null : newErrors;
-  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleSubmit = (e: React.FormEvent) => {};
+    // Reset errors
+    setErrors({});
+
+    // Validate form data
+    const validationErrors: Record<string, string> = {};
+
+    if (!formData.name.trim()) {
+      validationErrors.name = 'Name is required';
+    }
+
+    if (
+      !formData.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      validationErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!formData.skills.trim()) {
+      validationErrors.skills = 'Skills are required';
+    }
+
+    if (!formData.attendance) {
+      validationErrors.attendance = 'Please confirm your attendance';
+    }
+
+    if (!formData.trackPreference) {
+      validationErrors.trackPreference = 'Track preference is required';
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Create FormData object and append fields
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('attendance', formData.attendance);
+      formDataToSend.append('skills', formData.skills);
+      formDataToSend.append('teamName', formData.teamName || '');
+      formDataToSend.append('trackPreference', formData.trackPreference);
+      formDataToSend.append('mentorship', String(formData.mentorship)); // Convert boolean to string
+      formDataToSend.append('eventDate', formData.eventDate);
+      formDataToSend.append('eventLocation', formData.eventLocation);
+
+      // Simulate form submission (replace with actual API call)
+      console.log('Form Data Submitted:', Object.fromEntries(formDataToSend));
+
+      // Clear form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        attendance: 'yes',
+        skills: '',
+        teamName: '',
+        trackPreference: '',
+        mentorship: false,
+        eventDate: '2025-04-25',
+        eventLocation: 'ALX Ethiopia |Lideta Hub, 4th Floor|',
+      });
+
+      alert('RSVP submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred while submitting the form.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const openGoogleMaps = () => {
+    const encodedLocation = encodeURIComponent(formData.eventLocation);
     window.open(
-      `https://www.google.com/maps/search/?api=1&query=${formData.eventLocation}`
+      `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`
     );
   };
 
@@ -65,7 +130,7 @@ const RSVPForm = () => {
         <Calendar
           mode="single"
           selected={new Date(formData.eventDate)}
-          className="rounded  flex flex-col items-center w-full"
+          className="rounded w-full"
           fromDate={new Date(formData.eventDate)}
           toDate={new Date(formData.eventDate)}
           defaultMonth={new Date(formData.eventDate)}
@@ -147,7 +212,7 @@ const RSVPForm = () => {
           <Label>Track Preference</Label>
           <Select
             value={formData.trackPreference}
-            onValueChange={(value) =>
+            onValueChange={(value: string) =>
               setFormData((prev) => ({ ...prev, trackPreference: value }))
             }
             required
@@ -162,19 +227,20 @@ const RSVPForm = () => {
               <SelectItem value="gaming">Gaming</SelectItem>
             </SelectContent>
           </Select>
+          {errors.trackPreference && (
+            <p className="text-xs text-red-500">{errors.trackPreference}</p>
+          )}
         </div>
 
         {/* Mentorship Request */}
         <div className="flex items-center gap-3">
-          <Label>Mentorship Request</Label>
           <Checkbox
             checked={formData.mentorship}
             onCheckedChange={(checked: boolean) =>
               setFormData((prev) => ({ ...prev, mentorship: checked }))
             }
-          >
-            I would like to request mentorship during the event.
-          </Checkbox>
+          />
+          <Label>I would like to request mentorship during the event.</Label>
         </div>
 
         {/* Attendance */}
@@ -182,7 +248,7 @@ const RSVPForm = () => {
           <Label>Will you attend?</Label>
           <RadioGroup
             value={formData.attendance}
-            onValueChange={(value) =>
+            onValueChange={(value: string) =>
               setFormData((prev) => ({ ...prev, attendance: value }))
             }
             required
@@ -201,7 +267,7 @@ const RSVPForm = () => {
 
         {/* Submit Button */}
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Submitting..." : "Submit RSVP"}
+          {isLoading ? 'Submitting...' : 'Submit RSVP'}
         </Button>
       </form>
     </div>
