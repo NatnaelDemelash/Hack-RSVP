@@ -9,7 +9,7 @@ export async function submitRSVP(formData: FormData) {
   const name = formData.get('name')?.toString().trim();
   const email = formData.get('email')?.toString().trim();
   const skills = formData.get('skills')?.toString().trim();
-  const tracks = formData.get('tracks')?.toString().trim(); // Ensure this field exists in your form
+  const trackPreference = formData.get('trackPreference')?.toString().trim();
   const attendance = formData.get('attendance')?.toString().trim();
 
   // Validate form data
@@ -34,7 +34,7 @@ export async function submitRSVP(formData: FormData) {
         name,
         email,
         skills,
-        tracks: tracks || null, // Set to null if tracks is empty
+        trackPreference: trackPreference || null, // Set to null if tracks is empty
         attendance,
       },
     ]);

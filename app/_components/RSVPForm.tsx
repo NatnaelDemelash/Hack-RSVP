@@ -15,6 +15,8 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { MapPin } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
+import { submitRSVP } from '@/app/actions/submitRSVP';
+import { toast } from 'sonner';
 
 const RSVPForm = () => {
   const [formData, setFormData] = useState({
@@ -84,31 +86,37 @@ const RSVPForm = () => {
       formDataToSend.append('eventDate', formData.eventDate);
       formDataToSend.append('eventLocation', formData.eventLocation);
 
-      // Simulate form submission (replace with actual API call)
-      console.log('Form Data Submitted:', Object.fromEntries(formDataToSend));
+      // Call the server action to submit the RSVP
+      const response = await submitRSVP(formDataToSend);
 
-      // Clear form after successful submission
-      setFormData({
-        name: '',
-        email: '',
-        attendance: 'yes',
-        skills: '',
-        teamName: '',
-        trackPreference: '',
-        mentorship: false,
-        eventDate: '2025-04-25',
-        eventLocation: 'ALX Ethiopia |Lideta Hub, 4th Floor|',
-      });
+      if (response.success) {
+        // Clear form after successful submission
+        setFormData({
+          name: '',
+          email: '',
+          attendance: 'yes',
+          skills: '',
+          teamName: '',
+          trackPreference: '',
+          mentorship: false,
+          eventDate: '2025-04-25',
+          eventLocation: 'ALX Ethiopia |Lideta Hub, 4th Floor|',
+        });
 
-      alert('RSVP submitted successfully!');
+        // Show success toast
+        toast.success(response.message);
+      } else {
+        // Show error toast if submission fails
+        toast.error(response.message || 'Failed to submit RSVP.');
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('An error occurred while submitting the form.');
+      // Show error toast for unexpected errors
+      toast.error('An unexpected error occurred while submitting the form.');
     } finally {
       setIsLoading(false);
     }
   };
-
   const openGoogleMaps = () => {
     const encodedLocation = encodeURIComponent(formData.eventLocation);
     window.open(
