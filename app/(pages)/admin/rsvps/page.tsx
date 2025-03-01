@@ -8,11 +8,8 @@ export interface RSVP {
   email: string;
   attendance: string;
   skills: string;
-  team_name?: string;
-  track_preference: string;
+  trackPreference: string;
   mentorship: boolean;
-  event_date: string;
-  event_location: string;
 }
 
 export default async function RSVPsPage() {

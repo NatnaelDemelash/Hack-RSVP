@@ -42,7 +42,7 @@ export function RSVPList({ initialData }: { initialData: RSVP[] }) {
         <Input
           type="text"
           placeholder="Search by name or email..."
-          className="w-full"
+          className="w-1/2 border border-gray-900 focus:outline-none"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
@@ -55,11 +55,8 @@ export function RSVPList({ initialData }: { initialData: RSVP[] }) {
             <TableHead>Email</TableHead>
             <TableHead>Attendance</TableHead>
             <TableHead>Skills</TableHead>
-            <TableHead>Team Name</TableHead>
             <TableHead>Track Preference</TableHead>
             <TableHead>Mentorship</TableHead>
-            <TableHead>Event Date</TableHead>
-            <TableHead>Event Location</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -69,11 +66,8 @@ export function RSVPList({ initialData }: { initialData: RSVP[] }) {
               <TableCell>{rsvp.email}</TableCell>
               <TableCell>{rsvp.attendance}</TableCell>
               <TableCell>{rsvp.skills}</TableCell>
-              <TableCell>{rsvp.team_name || 'N/A'}</TableCell>
-              <TableCell>{rsvp.track_preference}</TableCell>
+              <TableCell>{rsvp.trackPreference}</TableCell>
               <TableCell>{rsvp.mentorship ? 'Yes' : 'No'}</TableCell>
-              <TableCell>{rsvp.event_date}</TableCell>
-              <TableCell>{rsvp.event_location}</TableCell>
             </TableRow>
           ))}
         </TableBody>
