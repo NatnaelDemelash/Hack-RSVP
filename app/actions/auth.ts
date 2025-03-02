@@ -1,8 +1,27 @@
 'use server';
 
-export async function signIn(prevState: void | null, formData: FormData) {
+import { redirect } from 'next/navigation';
+import { createClient } from '../utils/supabase/server';
+
+export async function signIn(
+  prevState: { error: string } | null,
+  formData: FormData
+) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  console.log('Email: ', email, 'Password: ', password);
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  console.log(data, 'data_login');
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect('/admin/rsvps');
 }

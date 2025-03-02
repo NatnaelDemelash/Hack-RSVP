@@ -4,7 +4,10 @@ import { signIn } from '../actions/auth';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-async function signInAction(prevState: void | null, formData: FormData) {
+async function signInAction(
+  prevState: { error: string } | null,
+  formData: FormData
+) {
   return await signIn(prevState, formData);
 }
 
@@ -57,6 +60,8 @@ const LoginComponent = () => {
           </a>
         </div>
 
+        {/* error state */}
+        {state?.error && <p className="text-red-500 text-xs">{state.error}</p>}
         {/* Submit Button */}
         <button
           type="submit"
