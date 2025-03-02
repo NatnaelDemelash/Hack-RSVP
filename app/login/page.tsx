@@ -1,9 +1,21 @@
 'use client';
-import React from 'react';
+import React, { useActionState } from 'react';
+import { signIn } from '../actions/auth';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
+async function signInAction(prevState: void | null, formData: FormData) {
+  return await signIn(prevState, formData);
+}
 
 const LoginComponent = () => {
+  const [state, formAcion] = useActionState(signInAction, null);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <form
+      action={formAcion}
+      className="min-h-screen flex items-center justify-center bg-gray-100"
+    >
       {/* Card Container */}
       <div className="w-full max-w-md p-8 space-y-4 rounded-lg shadow-lg bg-white">
         {/* Title */}
@@ -11,34 +23,14 @@ const LoginComponent = () => {
 
         {/* Email Field */}
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Enter your email"
-          />
+          <Label htmlFor="email">Email</Label>
+          <Input type="email" id="email" name="email" required />
         </div>
 
         {/* Password Field */}
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Enter your password"
-          />
+          <Label htmlFor="password">Password</Label>
+          <Input type="password" id="password" name="password" required />
         </div>
 
         {/* Forgot Password Link */}
@@ -73,7 +65,7 @@ const LoginComponent = () => {
           Login
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
